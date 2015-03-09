@@ -13,7 +13,7 @@ void parse(int**** p)
 	int k = 0; // section i
 	int l = 0; // section j
 	
-	char filename[] = "H:\\Cdev\\sudoku\\sodoku\\puzzles.txt";
+	char filename[] = "puzzles.txt";
 	fp = fopen(filename, "r");
 	char ch;
 	char* buf = malloc(sizeof(char)); // current char
@@ -475,13 +475,15 @@ int solve(int**** p, int n)
 			memset(tried[j], 0, sizeof(int) * 3);
 		}
 		
-		printf("problem %i: ", i+1);
 		sum += solvePuzzle(p[i], tried, 0);
+		printf("problem %i\n\n", i+1);
+		printf("Press Enter");
+		getch();
 		//printf("problem: %i, sum: %i\n", i+1, sum);
 		
 	}
 	
-	printf("%i", sum);
+	//printf("%i", sum);
 }
 
 
