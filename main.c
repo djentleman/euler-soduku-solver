@@ -255,7 +255,7 @@ bool testTried(int** t, int i, int j, int k)
 	return false; // this cell has not been tried
 }
 
-int solvePuzzle(int*** puzzle)
+int solvePuzzle(int*** puzzle, int** tried, int idx)
 {
 	int i; // section id
 	int j; // section i
@@ -271,7 +271,6 @@ int solvePuzzle(int*** puzzle)
 	int* best = malloc(sizeof(int) * 3); // contains the i j and k of easiest to guess cell
 	int* bestPoss = malloc(sizeof(int) * 9);
 	int bestN;
-	int idx = 0;
 	
 	int nPos = 0;
 	
@@ -279,12 +278,7 @@ int solvePuzzle(int*** puzzle)
 	bool complete = false;
 	
 	
-	int** tried = malloc(sizeof(int*) * 81);
-	for (i = 0; i < 81; i++)
-	{
-		tried[i] = malloc(sizeof(int) * 3);
-		memset(tried[i], 0, sizeof(int) * 3);
-	}
+	
 	
 	int*** tmp = malloc(sizeof(int**) * 9); // used when 'guessing'
 	
@@ -314,8 +308,9 @@ int solvePuzzle(int*** puzzle)
 		
 		
 		
-		//printBoard(puzzle);
+		//
 		// run a 'sweep'
+		//printBoard(puzzle);
 		for (i = 0; i < 9; i++)
 		{
 			// for all sections
@@ -344,8 +339,12 @@ int solvePuzzle(int*** puzzle)
 						
 						nPos = getPossibilityCount(possible);
 						
-						if (!testTried(tried, i, j, k));
+						if (!testTried(tried, i, j, k))
 						{
+							if(testTried(tried, i, j, k))
+							{
+								printf("vhgvh");
+							}
 							if (nPos < bestN)
 							{
 								//printf("%d\n", nPos < bestN);
@@ -388,6 +387,11 @@ int solvePuzzle(int*** puzzle)
 			// we need to guess
 			//printf("guess cell [%i][%i][%i]: %i possilibities\n\n", best[0], best[1], best[2], bestN);
 			
+			if (best[0] == 0 && best[1] == 0 && best[2] == 0)
+			{
+				return 0;
+			}
+			
 			tried[idx][0] = best[0];
 			tried[idx][1] = best[1];
 			tried[idx++][2] = best[2];
@@ -399,7 +403,7 @@ int solvePuzzle(int*** puzzle)
 			{
 				cpyPuzzle(puzzle, tmp);
 				tmp[best[0]][best[1]][best[2]] = getSolution(bestPoss);
-				sum = solvePuzzle(tmp);
+				sum = solvePuzzle(tmp, tried, idx);
 				if (sum != 0)
 				{
 					//printf("SOLVED\n");
@@ -444,14 +448,33 @@ int solve(int**** p, int n)
 	int i;
 	int sum = 0;
 	
-
+	int j;
 	
-	for (i = 0; i < n; i++)
+	int** tried = malloc(sizeof(int*) * 81);
+	for (i = 0; i < 81; i++)
 	{
-		printf("problem %i: ", i+1);
-		sum += solvePuzzle(p[i]);
-		//printf("problem: %i, sum: %i\n", i+1, sum);
+		tried[i] = malloc(sizeof(int) * 3);
+		memset(tried[i], 0, sizeof(int) * 3);
 	}
+	
+	
+	
+	for (i = 0; i < 6; i++)
+	{
+		
+		//reset
+		for (j = 0; j < 81; j++)
+		{
+			memset(tried[j], 0, sizeof(int) * 3);
+		}
+		
+		printf("problem %i: ", i+1);
+		sum += solvePuzzle(p[i], tried, 0);
+		//printf("problem: %i, sum: %i\n", i+1, sum);
+		
+	}
+	
+	printf("%i", sum);
 }
 
 
