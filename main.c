@@ -310,7 +310,7 @@ int solvePuzzle(int*** puzzle, int** tried, int idx)
 		
 		//
 		// run a 'sweep'
-		//printBoard(puzzle);
+		printBoard(puzzle);
 		for (i = 0; i < 9; i++)
 		{
 			// for all sections
@@ -415,6 +415,7 @@ int solvePuzzle(int*** puzzle, int** tried, int idx)
 					continue;
 				}
 			}
+			return 0;
 			
 			if (idx == 81)
 			{
@@ -427,7 +428,7 @@ int solvePuzzle(int*** puzzle, int** tried, int idx)
 		}
 	}
 	
-	//printBoard(puzzle);
+	printBoard(puzzle);
 	// puzzle is solved
 	// get sum
 	
@@ -437,9 +438,15 @@ int solvePuzzle(int*** puzzle, int** tried, int idx)
 	sum += puzzle[0][0][0] * 100;
 	
 	//printf("%i \n", sum);
-	
-	printf("SOLVED\n");
-	return sum;
+	if (sum != 0 && sum != -1)
+	{
+		printf("SOLVED\n");
+		return sum;
+	}
+	else
+	{
+		printf("FAILED\n");
+	}
 }
 
 int solve(int**** p, int n)
@@ -459,7 +466,7 @@ int solve(int**** p, int n)
 	
 	
 	
-	for (i = 0; i < 6; i++)
+	for (i = 0; i < n; i++)
 	{
 		
 		//reset
